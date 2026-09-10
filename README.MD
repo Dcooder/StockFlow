@@ -43,6 +43,4 @@ Use a logged-in Django session. Product `quantity` is read-only in the API: crea
 
 Secrets are environment based, CSRF middleware remains enabled, passwords use Django hashing, ORM queries are used throughout, and write permissions are enforced server-side.
 
-## License and attribution
 
-StockFlow is a substantial customization and extension of [iamfoysal/complete-django-inventory](https://github.com/iamfoysal/complete-django-inventory). The upstream repository did not include a LICENSE file when inspected on September 10, 2026; preserve its Git history and contact the upstream author before treating original upstream material as newly licensed.
