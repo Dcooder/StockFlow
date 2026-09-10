@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign in | StockFlow{% endblock %}
+
+{% block content %}
+<div class="login-page">
+	<section class="login-copy">
+		<a class="brand" href="{% url 'landing' %}"><span class="brand-mark">S</span><span>Stock<span>Flow</span></span></a>
+		<h1>Know exactly<br>what you have.</h1>
+		<p>Simple, reliable inventory management for growing businesses.</p>
+	</section>
+	<section class="login-panel">
+		<div class="auth-card">
+			<p class="eyebrow">WELCOME BACK</p>
+			<h1>Sign in to StockFlow</h1>
+			<p class="muted">Enter your details to continue.</p>
+			{% if form.non_field_errors %}<p class="negative">{{ form.non_field_errors|striptags }}</p>{% endif %}
+			<form method="post">
+				{% csrf_token %}
+				{% for field in form %}
+					<p><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<small class="negative">{{ field.errors|striptags }}</small>{% endif %}</p>
+				{% endfor %}
+				<button class="button primary" type="submit">Sign in</button>
+			</form>
+			<p><a class="table-action" href="{% url 'password_reset' %}">Forgot your password?</a></p>
+			<p class="muted">New to StockFlow? <a class="table-action" href="{% url 'register' %}">Create an account</a></p>
+		</div>
+	</section>
+</div>
+{% endblock %}

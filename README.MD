@@ -1,142 +1,48 @@
-# Django Inventory Management System
+# StockFlow — Inventory & Stock Management Platform
 
-
-This is a simple inventory management system built with Django. It allows users to add, update, and delete products from the inventory. It also allows users to upload multiple files to the server.
-
-## Screenshots
-![Login page](/site-image/Sign-In.png)
-
-![Product page](/site-image/Inventory-Management.png)
-
-
-"""
-This code is part of a locally run Django project.
-
-To run the project locally, follow these steps:
-
-1. Install Python and Django on your machine.
-2. Clone the project repository from GitHub.
-3. Create a virtual environment and activate it.
-4. Install the project dependencies using pip.
-5. Set up the database by running migrations.
-6. Start the development server using the 'manage.py' script.
-
-
-Note: Make sure to update the settings file with the necessary configurations for your local environment.
-"""
-
+StockFlow is a Django application for small businesses to manage products, categories, suppliers and auditable stock movements.
 
 ## Features
 
-- Login and registration system
-- Add, update, and delete products(stock management, price, and quantity)
-- View product details
-- Product search
-- Product Categories
-- Image download
-- Upload multiple files
-- Email Sending
-- RESTful API for product management
-- File upload API
-- Docker support
+- Session-based registration, login and logout; every application/API view requires authentication.
+- Public landing page with secure Django password reset by email.
+- Admin/Manager/Staff roles. Managers administer products, categories and suppliers; Staff can record stock movements but cannot change catalog records.
+- Product search by name, SKU or category, category filtering, low-stock detection and pagination.
+- Atomic stock-in/stock-out logic that locks the product row and rejects insufficient stock.
+- REST API at `/api/categories/`, `/api/suppliers/`, `/api/products/`, and `/api/transactions/`.
 
+## Stack and architecture
 
-## Technologies
-- Python
-- Django
-- SQLite/PostgreSQL/MySQL
-- HTML
-- CSS
-- JavaScript
-- Docker
-- Django Rest Framework
+Python, Django, Django REST Framework, PostgreSQL, Django templates and Docker. `accounts` owns registration; `inventory` owns the Category, Supplier, Product and InventoryTransaction models, web views, and API.
 
+Products belong to categories and optionally suppliers. Every stock movement belongs to a product and user. Categories/suppliers are protected from deletion while products reference them.
 
+## Setup
 
-## Installation
+```powershell
+Copy-Item .env.example .env
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
-1. Clone the repository:
+Create a PostgreSQL database and set the variables in `.env` (or your shell): `DJANGO_SECRET_KEY`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_HOST`, and `DATABASE_PORT`. The default runtime backend is PostgreSQL. `DB_ENGINE=sqlite` is available only for a quick local demo; tests automatically use SQLite.
 
-   ```bash
-   git clone https://github.com/iamfoysal/complete-django-inventory
-    ```
-2. Navigate to the project directory:
+Password reset uses the configured SMTP backend. Set `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USE_TLS`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` (a Gmail App Password, never your account password), and `DEFAULT_FROM_EMAIL` before using that flow. The `.env` file is local-only and must never be committed.
 
-   ```bash
-   cd complete-django-inventory
-   ```
-3. Create a virtual environment:
+Run checks with `python manage.py check` and tests with `python manage.py test`.
 
-   ```bash
-    python -m venv venv
-    ```
-4. Activate the virtual environment:
+## API
 
-   ```bash
-   source venv/bin/activate
-   ```
-5. Install the project dependencies:
+Use a logged-in Django session. Product `quantity` is read-only in the API: create an `IN` or `OUT` transaction instead. Product/category/supplier mutations require Manager or Admin; transaction creation is available to all authenticated roles. A rejected stock-out returns a validation error.
 
-   ```bash
-    pip install -r requirements.txt
-    ```
-6. Run the migrations:
+## Security
 
-   ```bash
-    python manage.py migrate
-    ```
-7. Start the development server:
+Secrets are environment based, CSRF middleware remains enabled, passwords use Django hashing, ORM queries are used throughout, and write permissions are enforced server-side.
 
-   ```bash
-    python manage.py runserver
-    ```
-8. Open the following URL in your browser:
+## License and attribution
 
-   ```
-   http://localhost:8000
-   ```
-
-[API docs](/API_INFO.MD)
-
-
-##### if you want to run the project in your local machine using docker then follow the below steps:
-
-1. After clone the repository, navigate to the project directory:
-
-   ```bash
-   cd complete-django-inventory
-   ```
-2. Run the following command to build the docker image:
-
-   ```bash
-    docker-compose build
-    ```
-
-3. Run the following command to start the docker container:
-
-   ```bash
-    docker-compose up
-    ```
-
-4. Open the following URL in your browser:
-
-   ```
-   http://localhost:8000
-   ```
-
-
-
-### Contributions are always welcome! If you want to contribute to this project:
-
-1. 🍴 Fork the project.
-2. 🔨 Create your feature branch (`git checkout -b my-new-feature`).
-3. 💻 Make your changes.
-4. ✅ Ensure the tests pass and the code is linted (`black . && pytest`).
-5. 📝 Write or update tests for the changes that you made.
-6. 📝 Write a good commit message.
-7. 🌟 Push to the branch (`git push origin my-new-feature`).
-8. 🔃 Create a new Pull Request.
-
-Thank you for your contributions!
-
-
+StockFlow is a substantial customization and extension of [iamfoysal/complete-django-inventory](https://github.com/iamfoysal/complete-django-inventory). The upstream repository did not include a LICENSE file when inspected on September 10, 2026; preserve its Git history and contact the upstream author before treating original upstream material as newly licensed.

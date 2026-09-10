@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}StockFlow | Inventory, clearly managed{% endblock %}
+
+{% block content %}
+<style>
+    .landing-page { min-height: 100vh; padding: 28px clamp(22px, 6vw, 92px) 54px; background: linear-gradient(135deg, #f7fbf9, #f6f8fa 58%, #eaf4ef); }
+    .landing-nav, .landing-hero, .landing-features { max-width: 1240px; margin-left: auto; margin-right: auto; }
+    .landing-nav { display: flex; align-items: center; justify-content: space-between; }
+    .landing-hero { margin-top: clamp(62px, 11vh, 126px); display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(340px, .8fr); gap: clamp(48px, 9vw, 140px); align-items: center; }
+    .landing-copy h1 { font-size: clamp(42px, 5.5vw, 76px); line-height: 1.02; letter-spacing: -2.5px; max-width: 740px; margin: 0; }
+    .landing-lede { color: var(--muted); font-size: 18px; line-height: 1.65; max-width: 570px; margin: 25px 0; }
+    .landing-actions { display: flex; align-items: center; gap: 24px; }.landing-text-link { color: var(--brand); font-weight: 650; text-decoration: none; }
+    .landing-visual { background: #143b34; color: #e5f4ee; border-radius: 18px; padding: 26px; min-height: 330px; box-shadow: 0 24px 60px rgba(23,72,60,.18); transform: rotate(1.5deg); }
+    .visual-topline, .visual-footer { display: flex; justify-content: space-between; color: #a9c9c0; font-size: 13px; }.status-dot, .visual-footer strong { color: #8fe0b7; }.visual-number { font-size: 48px; font-weight: 700; letter-spacing: -2px; margin: 45px 0 20px; }.visual-number small { display: block; color: #a9c9c0; font-size: 13px; font-weight: 400; letter-spacing: 0; }.visual-bars { height: 96px; display: flex; align-items: end; gap: 10px; border-bottom: 1px solid #3a6058; }.visual-bars span { display: block; flex: 1; background: #54c197; border-radius: 4px 4px 0 0; }.visual-footer { margin-top: 15px; }
+    .landing-features { margin-top: clamp(90px, 14vh, 170px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; border-top: 1px solid #dce8e3; padding-top: 27px; }.landing-features article { max-width: 310px; }.feature-index { color: var(--brand); font-size: 12px; font-weight: 700; }.landing-features h2 { font-size: 18px; margin: 20px 0 8px; }.landing-features p { color: var(--muted); margin: 0; line-height: 1.65; }
+    @media (max-width: 800px) { .landing-hero { grid-template-columns: 1fr; margin-top: 76px; }.landing-visual { max-width: 520px; width: 100%; transform: none; }.landing-features { grid-template-columns: 1fr; gap: 25px; }.landing-features article { max-width: none; } }
+    @media (max-width: 520px) { .landing-page { padding: 22px 18px 40px; }.landing-hero { margin-top: 58px; }.landing-actions { align-items: flex-start; flex-direction: column; gap: 16px; }.landing-visual { padding: 20px; min-height: 280px; } }
+</style>
+<section class="landing-page">
+    <nav class="landing-nav">
+        <a class="brand" href="{% url 'landing' %}">
+            <span class="brand-mark">S</span>
+            <span>Stock<span>Flow</span></span>
+        </a>
+        <a class="button secondary" href="{% url 'login' %}">Sign in</a>
+    </nav>
+
+    <div class="landing-hero">
+        <div class="landing-copy">
+            <p class="eyebrow">INVENTORY, CLEARLY MANAGED</p>
+            <h1>Know what you have. Move with confidence.</h1>
+            <p class="landing-lede">
+                StockFlow gives growing teams one calm, reliable place to manage products,
+                suppliers, stock levels, and every movement in between.
+            </p>
+            <div class="landing-actions">
+                <a class="button primary" href="{% url 'login' %}">Get started <span aria-hidden="true">→</span></a>
+                <a class="landing-text-link" href="{% url 'register' %}">Create an account</a>
+            </div>
+        </div>
+        <div class="landing-visual" aria-label="StockFlow inventory overview preview">
+            <div class="visual-topline"><span>Inventory overview</span><span class="status-dot">Live</span></div>
+            <div class="visual-number">1,248 <small>items in stock</small></div>
+            <div class="visual-bars"><span style="height: 42%"></span><span style="height: 64%"></span><span style="height: 52%"></span><span style="height: 78%"></span><span style="height: 69%"></span><span style="height: 91%"></span><span style="height: 83%"></span></div>
+            <div class="visual-footer"><span>Stock activity</span><strong>+12.8%</strong></div>
+        </div>
+    </div>
+
+    <div class="landing-features">
+        <article><span class="feature-index">01</span><h2>Product management</h2><p>Keep product details, pricing, SKUs, and stock thresholds organized.</p></article>
+        <article><span class="feature-index">02</span><h2>Supplier visibility</h2><p>See who supplies your catalog and keep the right context close at hand.</p></article>
+        <article><span class="feature-index">03</span><h2>Auditable movements</h2><p>Track stock in and out with a clear history your whole team can trust.</p></article>
+    </div>
+</section>
+{% endblock %}

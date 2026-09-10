@@ -1,0 +1,16 @@
+import django.db.models.deletion
+from django.conf import settings
+from django.db import migrations, models
+def groups(apps, schema_editor):
+    Group = apps.get_model("auth", "Group")
+    for name in ("Admin", "Manager", "Staff"): Group.objects.get_or_create(name=name)
+class Migration(migrations.Migration):
+    initial = True
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
+    operations = [
+        migrations.CreateModel(name="Category", fields=[("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")), ("name", models.CharField(max_length=100, unique=True)), ("created_at", models.DateTimeField(auto_now_add=True))], options={"ordering": ["name"]}),
+        migrations.CreateModel(name="Supplier", fields=[("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")), ("name", models.CharField(max_length=150, unique=True)), ("contact_person", models.CharField(blank=True, max_length=150)), ("email", models.EmailField(blank=True, max_length=254)), ("phone", models.CharField(blank=True, max_length=30)), ("address", models.TextField(blank=True)), ("created_at", models.DateTimeField(auto_now_add=True))], options={"ordering": ["name"]}),
+        migrations.CreateModel(name="Product", fields=[("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")), ("name", models.CharField(max_length=255)), ("sku", models.CharField(max_length=64, unique=True)), ("description", models.TextField(blank=True)), ("price", models.DecimalField(decimal_places=2, max_digits=10)), ("quantity", models.PositiveIntegerField(default=0)), ("reorder_level", models.PositiveIntegerField(default=5)), ("image", models.ImageField(blank=True, upload_to="products/")), ("created_at", models.DateTimeField(auto_now_add=True)), ("updated_at", models.DateTimeField(auto_now=True)), ("category", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="products", to="inventory.category")), ("supplier", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name="products", to="inventory.supplier"))], options={"ordering": ["name"]}),
+        migrations.CreateModel(name="InventoryTransaction", fields=[("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")), ("transaction_type", models.CharField(choices=[("IN", "Stock in"), ("OUT", "Stock out")], max_length=3)), ("quantity", models.PositiveIntegerField()), ("reason", models.CharField(max_length=255)), ("created_at", models.DateTimeField(auto_now_add=True)), ("product", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="transactions", to="inventory.product")), ("user", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="inventory_transactions", to=settings.AUTH_USER_MODEL))], options={"ordering": ["-created_at"]}),
+        migrations.AddIndex(model_name="product", index=models.Index(fields=["sku"], name="inventory_p_sku_6a1287_idx")), migrations.AddIndex(model_name="product", index=models.Index(fields=["name"], name="inventory_p_name_4910e3_idx")), migrations.RunPython(groups, migrations.RunPython.noop),
+    ]
